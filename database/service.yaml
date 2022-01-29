@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: laznp-db-svc
+  name: laznp-db-svc
+  namespace: wordpress
+spec:
+  ports:
+  - name: laznp-db-port
+    port: 3306
+    protocol: TCP
+    targetPort: 3306
+  selector:
+    app: laznp-db
+  type: ClusterIP

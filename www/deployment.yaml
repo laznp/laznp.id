@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: laznp-www
+  name: laznp-www
+  namespace: wordpress
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: laznp-www
+  template:
+    metadata:
+      labels:
+        app: laznp-www
+    spec:
+      containers:
+      - image: wordpress
+        name: wordpress
+        volumeMounts:
+        - mountPath: /var/www/html
+          name: laznp-www-data
+        env:
+          - name: WORDPRESS_DB_HOST
+            valueFrom:
+              secretKeyRef:
+                name: www-config
+                key: WORDPRESS_DB_HOST
+          - name: WORDPRESS_DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: www-config
+                key: WORDPRESS_DB_USER
+          - name: WORDPRESS_DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: www-config
+                key: WORDPRESS_DB_PASSWORD
+          - name: WORDPRESS_DB_NAME
+            valueFrom:
+              secretKeyRef:
+                name: www-config
+                key: WORDPRESS_DB_NAME
+
+      volumes:
+      - name: laznp-www-data
+        hostPath:
+          path: /app/laznp.id/www
+          type: DirectoryOrCreate
