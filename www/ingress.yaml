@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: laznp-www-ingress
+  namespace: wordpress
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+    traefik.ingress.kubernetes.io/router.middlewares: wordpress-laznp-www-middleware@kubernetescrd
+spec:
+  rules:
+  - host: "laznp.id"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: laznp-www-svc
+            port:
+              number: 80
